@@ -67,10 +67,33 @@ class FORS_setup:
             self.sorted = self.sorted.loc[self.sorted["frametype"] != "bias"]
 
     def read_pypeit_sorted(self):
-        pass
+        sorted_file = glob.glob(self.working_dir + "/*.sorted")[0]
+        df = pd.read_table(sorted_file, sep="|", header=13, skipinitialspace=True,)
+        df.drop(df.tail(1).index, inplace=True)  # remove unused last row
+        df = df.drop(df.columns[0], axis=1)  # remove empty col due to pipe
+        df = df.drop(df.columns[-1], axis=1)  # remove empty col due to pipe
+        a = df.columns
+        df.columns = [a[i].strip() for i in range(len(a))]
+        self.sorted = df.apply(lambda x: x.str.strip() if x.dtype == "object" else x)
 
     def write_virt_pypeit_file(self):
-        pass
+        modified_df = self.sorted.copy()
+        modified_df[" "] = " "
+        modified_df["  "] = "  "
+        modified_df = modified_df.set_index("  ")
+        self.virt_file = io.StringIO()
+        modified_df.to_csv(self.virt_file, sep="|")
+        content = self.virt_file.getvalue().replace("|", " | ")
+        self.virt_file = io.StringIO()
+        self.make_pypeit_header()
+        self.virt_file.write(self.pypeit_header)
+        self.virt_file.write(content)
+        self.virt_file.write("data end\n")
+        self.tmp = tempfile.NamedTemporaryFile()
+        with open(self.tmp.name, "w") as f:
+            f.write(self.virt_file.getvalue())
+        with open(os.path.join(self.working_dir, "FORSify.pypeit"), "w") as f:
+            f.write(self.virt_file.getvalue())
 
     def make_pypeit_header(self):
         pass
