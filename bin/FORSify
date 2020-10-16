@@ -6,7 +6,7 @@
 
 
 """
-This script runs PypeIt
+This script runs FORSify
 """
 
 from FORSify import run_FORSify
