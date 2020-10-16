@@ -6,7 +6,7 @@
 
 import glob
 import pandas as pd
-
+from pkg_resources import resource_filename
 import io
 import tempfile
 import pathlib
@@ -18,7 +18,7 @@ from pypeit.spectrographs.util import load_spectrograph
 from pypeit.par import pypeitpar
 from pypeit import fluxcalibrate
 
-from convert_to_iraf import PypeIt_to_iraf
+from FORSify.util import PypeIt_to_iraf
 
 from FORSify.util import symlink_force
 
@@ -42,7 +42,8 @@ class FORS_setup:
         self.sources = args.sources
         self.archival = args.archival
         self.sorted = None
-        self.FORSIfy_path = pathlib.Path(__file__).parent.absolute()
+        self.FORSIfy_path = resource_filename("FORSify")
+        # self.FORSIfy_path = pathlib.Path(__file__).parent.absolute()
 
     def reduce(self):
         if self.archival == True:
