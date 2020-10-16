@@ -95,8 +95,6 @@ class PypeIt_to_iraf:
             keys = ["OPT_FLAM", "OPT_FLAM_SIG", "BOX_FLAM", "OPT_COUNTS_SIG"]
         else:
             keys = ["OPT_COUNTS", "BOX_COUNTS", "OPT_COUNTS_SKY", "OPT_COUNTS_SIG"]
-        for key in keys:
-            print(key)
         self.number_columns = len(keys)
         self.extracted_data = np.array([data[key] for key in keys])
         self.extracted_data = self.extracted_data.reshape(
@@ -104,9 +102,7 @@ class PypeIt_to_iraf:
         )
         if self.flux == True:
             clean_extracted = []
-            print(self.extracted_data.shape)
             mask = ~np.isnan(self.extracted_data[0, :, :])
-            # print(mask.shape)
             self.pypeit_wave = data["OPT_WAVE"][mask.flatten()]
             clean_extracted.append(
                 self.extracted_data[0, :, :][~np.isnan(self.extracted_data[0, :, :])]
@@ -127,10 +123,6 @@ class PypeIt_to_iraf:
             self.extracted_data = self.extracted_data.reshape(
                 self.number_columns, 1, self.pypeit_wave.shape[0]
             )
-            import matplotlib.pylab as plt
-
-            plt.plot(self.pypeit_wave, self.extracted_data[1, 0, :])
-            plt.show()
 
     def linearize_wave_grid(self):
         print(
