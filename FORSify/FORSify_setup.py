@@ -11,30 +11,22 @@ import io
 import tempfile
 import pathlib
 from astropy.io import fits
-
+import os
 import pypeit
 from pypeit.pypeitsetup import PypeItSetup
+from pypeit import pypeit
 from pypeit.spectrographs.util import load_spectrograph
 from pypeit.par import pypeitpar
 from pypeit import fluxcalibrate
 
 from FORSify.util import PypeIt_to_iraf
-
 from FORSify.util import symlink_force
 
 
 class FORS_setup:
-    def __init__(
-        self,
-        working_dir,
-        data_dir,
-        chip=1,
-        flat=["illumflat", "pixelflat", "trace"],
-        bias=True,
-        sources=0,
-        archival=False,
-    ):
+    def __init__(self, working_dir, args):
         self.working_dir = working_dir
+        self.args = args
         self.chip = args.chip
         self.flat = args.flat
         self.bias = args.bias
@@ -42,20 +34,23 @@ class FORS_setup:
         self.sources = args.sources
         self.archival = args.archival
         self.sorted = None
-        self.FORSIfy_path = resource_filename("FORSify")
-        # self.FORSIfy_path = pathlib.Path(__file__).parent.absolute()
+        # self.FORSIfy_path = resource_filename("FORSify")
+        self.FORSIfy_path = pathlib.Path(__file__).parent.absolute()
 
     def reduce(self):
         if self.archival == True:
             print("Using archival data")
             self.create_archival_data_symlinks()
-        if args.root is not None:
+        if self.args.root is not None:
             ps = PypeItSetup.from_file_root(
-                args.root, "vlt_fors2", extension=".fits", output_path=self.working_dir
+                self.args.root,
+                "vlt_fors2",
+                extension=".fits",
+                output_path=self.working_dir,
             )
         else:
             raise IOError("Need to set -r!")
-        ps.run(setup_only=True, sort_dir=sort_dir, write_bkg_pairs=False)
+        ps.run(setup_only=True, sort_dir=self.working_dir, write_bkg_pairs=False)
         self.read_pypeit_sorted()
         self.change_flat_type()
         self.choose_detector_chip()
@@ -64,9 +59,9 @@ class FORS_setup:
         self.write_virt_pypeit_file()
         pipeline = pypeit.PypeIt(
             self.tmp.name,
-            verbosity=args.verbosity,
+            verbosity=self.args.verbosity,
             reuse_masters=False,
-            overwrite=args.overwrite,
+            overwrite=self.args.overwrite,
         )
         pipeline.reduce_all()
         self.flux_spectra()
@@ -118,13 +113,12 @@ class FORS_setup:
     def create_archival_data_symlinks(self):
         all_files = []
         path = os.path.join(
-            self.FORSIfy_path, "archival_calibs", "GRIS300V", "20190922"
+            self.FORSIfy_path, "data", "archival_calibs", "GRIS300V", "20190922"
         )
         for type in ["arc", "flats", "bias"]:
             filepath = os.path.join(path, type, "*.fits")
             files_of_type = glob.glob(filepath)
             all_files += files_of_type
-
         for file in all_files:
             filename = os.path.split(file)[1]
             symlink_force(file, os.path.join(self.data_dir, filename))
@@ -178,7 +172,7 @@ class FORS_setup:
         self.pypeit_header += "[calibrations]\n"
         self.pypeit_header += "[[slitedges]]\n"
         self.pypeit_header += "sync_predict = nearest\n"
-        if args.sources > 0:
+        if self.args.sources > 0:
             self.pypeit_header += "[reduce]\n"
             self.pypeit_header += "[[findobj]]\n"
             self.pypeit_header += "maxnumber =" + str(self.sources) + "\n"

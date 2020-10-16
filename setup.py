@@ -79,7 +79,7 @@ def run_setup(data_files, scripts, packages, install_requires):
         keywords="ESO VLT FORS2 automatic pipeline",
         url="https://github.com/afloers/FORSIFY",
         packages=packages,
-        package_data={"pypeit": data_files, "": ["*.rst", "*.txt"]},
+        package_data={"FORSify": data_files, "": ["*.rst", "*.txt"]},
         python_requires=">=3.7",
         include_package_data=True,
         scripts=scripts,
@@ -102,7 +102,6 @@ if __name__ == "__main__":
     data_files = get_data_files()
     # Compile the scripts in the bin/ directory
     scripts = get_scripts()
-    print(scripts)
     # Get the packages to include
     packages = find_packages()
     # Collate the dependencies based on the system text file
@@ -110,55 +109,3 @@ if __name__ == "__main__":
     install_requires = []  # Remove this line to enforce actual installation
     # Run setup from setuptools
     run_setup(data_files, scripts, packages, install_requires)
-
-
-# #!/usr/bin/env python
-#
-# from setuptools import setup
-# from os import path
-#
-# here = path.abspath(path.dirname(__file__))
-#
-# # Get the long description from the README file
-# with open(path.join(here, "README.md"), encoding="utf-8") as f:
-#     long_description = f.read()
-#
-# KEYWORDS = """\
-# ESO
-# data
-# reduction
-# FORS2
-# pipeline
-# physics
-# python
-# """
-# CLASSIFIERS = """\
-# Development Status :: 3 - Alpha
-# Intended Audience :: Science/Research
-# License :: MIT License
-# Operating System :: MacOS :: MacOS X
-# Operating System :: POSIX :: Linux
-# Programming Language :: Python
-# Programming Language :: Python :: 3
-# Programming Language :: Python :: 3.6
-# Programming Language :: Python :: 3.7
-# Programming Language :: Python :: 3.8
-# Topic :: Scientific/Engineering
-# Topic :: Scientific/Engineering :: Physics
-# """
-#
-# setup(
-#     name="FORSify",
-#     version="0.1.0",
-#     description="Automatic Data Reduction Pipeline",
-#     long_description=long_description,
-#     long_description_content_type="text/markdown",
-#     url="https://github.com/afloers/FORSIFY",
-#     author="A. Floers",
-#     author_email="floersandreas@gmail.com",
-#     license="MIT",
-#     classifiers=CLASSIFIERS.strip().split("\n"),
-#     keywords=KEYWORDS.strip().replace("\n", " "),
-#     extras_require={"test": ["pytest", "pytest-cov"],},
-#     packages=["FORSify",],
-# )

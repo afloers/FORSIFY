@@ -6,7 +6,7 @@
 
 import argparse
 import os
-from FORSify import FORS_setup
+from FORSify.FORSify_setup import FORS_setup
 from FORSify.util import PypeIt_to_iraf
 
 
