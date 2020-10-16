@@ -1,0 +1,16 @@
+#!/usr/bin/env python
+#
+# See top-level LICENSE file for Copyright information
+#
+# -*- coding: utf-8 -*-
+
+
+"""
+This script runs PypeIt
+"""
+
+from FORSify import run_FORSify
+import sys
+
+if __name__ == '__main__':
+    sys.exit(run_FORSify.main(run_FORSify.parse_args()))
