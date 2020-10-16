@@ -23,8 +23,25 @@ from convert_to_iraf import PypeIt_to_iraf
 
 
 class FORS_setup:
-    def __init__():
-        pass
+    def __init__(
+        self,
+        working_dir,
+        data_dir,
+        chip=1,
+        flat=["illumflat", "pixelflat", "trace"],
+        bias=True,
+        sources=0,
+        archival=False,
+    ):
+        self.working_dir = working_dir
+        self.chip = args.chip
+        self.flat = args.flat
+        self.bias = args.bias
+        self.data_dir = args.root
+        self.sources = args.sources
+        self.archival = args.archival
+        self.sorted = None
+        self.FORSIfy_path = pathlib.Path(__file__).parent.absolute()
 
     def reduce(self):
         pass
@@ -35,14 +52,19 @@ class FORS_setup:
     def create_archival_data_symlinks(self):
         pass
 
-    def use_bias_frames(self):
-        pass
+    def change_flat_type(self):
+        flat_type = ",".join(self.flat)
+        self.sorted["frametype"] = self.sorted["frametype"].replace(
+            ["pixelflat,trace"], flat_type
+        )
 
     def choose_detector_chip(self):
-        pass
+        chip = "CHIP" + str(self.chip)
+        self.sorted = self.sorted.loc[self.sorted["detector"] == chip]
 
-    def change_flat_type(self):
-        pass
+    def use_bias_frames(self):
+        if self.bias == False:
+            self.sorted = self.sorted.loc[self.sorted["frametype"] != "bias"]
 
     def read_pypeit_sorted(self):
         pass
