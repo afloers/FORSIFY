@@ -10,7 +10,6 @@ import pandas as pd
 import io
 import tempfile
 import pathlib
-import errno
 from astropy.io import fits
 
 import pypeit
@@ -20,6 +19,8 @@ from pypeit.par import pypeitpar
 from pypeit import fluxcalibrate
 
 from convert_to_iraf import PypeIt_to_iraf
+
+from FORSify.util import symlink_force
 
 
 class FORS_setup:

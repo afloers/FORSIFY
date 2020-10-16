@@ -7,7 +7,7 @@
 import argparse
 import os
 from FORSify import FORSify_setup
-from FORSify import PypeIt_to_iraf
+from FORSify.util import PypeIt_to_iraf
 
 
 def parse_args():
