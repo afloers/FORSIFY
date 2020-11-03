@@ -58,7 +58,7 @@ def get_requirements():
 
 NAME = "FORSify"
 # do not use x.x.x-dev.  things complain.  instead use x.x.xdev
-VERSION = "0.1.0"
+VERSION = "0.1.1"
 entry_points = {}
 
 

@@ -4,11 +4,12 @@
 
 # Requirements
 
-(see `pypeit/requirements.txt`)
+(see `FORSIFY/requirements.txt`)
 
 * python
 * numpy
 * scipy
+* pandas
 * matplotlib
 * astropy
 * ginga
@@ -16,6 +17,7 @@
 * future
 * PyYAML
 * linetools
+* spectres
 * IPython
 * scikit-learn
 * configobj
