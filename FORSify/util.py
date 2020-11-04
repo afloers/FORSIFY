@@ -83,47 +83,6 @@ class PypeIt_to_iraf:
         closest = spectra_list[np.argmin(pixel_list)]
         return closest
 
-    # def extract_pypeit_data(self):
-    #     closest_object = self.get_correct_pypeit_spectrum()
-    #     print(
-    #         "\tClosest object to pixel #{}: ".format(self.centered_pixel),
-    #         closest_object,
-    #     )
-    #     data = self.pypeit_reduction[closest_object].data
-    #     self.pypeit_wave = data["OPT_WAVE"]
-    #     if self.flux == True:
-    #         keys = ["OPT_FLAM", "OPT_FLAM_SIG", "BOX_FLAM", "OPT_COUNTS_SIG"]
-    #     else:
-    #         keys = ["OPT_COUNTS", "BOX_COUNTS", "OPT_COUNTS_SKY", "OPT_COUNTS_SIG"]
-    #     self.number_columns = len(keys)
-    #     self.extracted_data = np.array([data[key] for key in keys])
-    #     self.extracted_data = self.extracted_data.reshape(
-    #         self.number_columns, 1, self.pypeit_wave.shape[0]
-    #     )
-    #     if self.flux == True:
-    #         clean_extracted = []
-    #         mask = ~np.isnan(self.extracted_data[0, :, :])
-    #         self.pypeit_wave = data["OPT_WAVE"][mask.flatten()]
-    #         clean_extracted.append(
-    #             self.extracted_data[0, :, :][~np.isnan(self.extracted_data[0, :, :])]
-    #             * 1e-17
-    #         )
-    #         clean_extracted.append(
-    #             self.extracted_data[1, :, :][~np.isnan(self.extracted_data[0, :, :])]
-    #             * 1e-17
-    #         )
-    #         clean_extracted.append(
-    #             self.extracted_data[2, :, :][~np.isnan(self.extracted_data[0, :, :])]
-    #         )
-    #         clean_extracted.append(
-    #             self.extracted_data[3, :, :][~np.isnan(self.extracted_data[0, :, :])]
-    #         )
-    #
-    #         self.extracted_data = np.array(clean_extracted)
-    #         self.extracted_data = self.extracted_data.reshape(
-    #             self.number_columns, 1, self.pypeit_wave.shape[0]
-    #         )
-
     def extract_pypeit_data(self):
         closest_object = self.get_correct_pypeit_spectrum()
         print(
