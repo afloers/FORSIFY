@@ -23,6 +23,39 @@
 * configobj
 * pypeit
 
+# Usage
+See all FORSify options by running the following command in your terminal:
+```console
+foo@bar:~$ FORSify -h
+usage: FORSify [-h] -r ROOT [-c {1,2}] [-b BIAS] [-f FLAT] [-s SOURCES] [-v VERBOSITY] [-o] [-a]
+
+Script for running FORSify
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -r ROOT, --root ROOT  Raw data directory
+  -c {1,2}, --chip {1,2}
+                        FORS detector ccd number; can be [1,2].
+  -b BIAS, --bias BIAS  Specifies whether bias frames are used or not. The default is True.
+  -f FLAT, --flat FLAT  File type of flat field images. Can be any combination of ["illumflat", "pixelflat", "trace"]
+  -s SOURCES, --sources SOURCES
+                        Maximum number of sources to model/extract. An arbitrary number of sources can be specified with '0'.
+  -v VERBOSITY, --verbosity VERBOSITY
+                        Verbosity level between 0 [none] and 2 [all]
+  -o, --overwrite       Overwrite any existing files/directories
+  -a, --archival        If True, use archival calibration data instead.
+```
+For standard reductions, only two options are important:
+
+`-r` indicates the raw data folder with respect to your current working directory.
+
+If `--archival` is set the pipeline uses archival calibration frames for the reduction. In this case, only the science frame needs to be placed in the raw data folder.
+
+# Output
+FORSify reduces and fluxes the science frames automatically. Fluxing is performed using a sensitivity function created from all standard stars of the corresponding semester using the same setup as the science frame.
+
+Output files are given both in the pypeit and iraf format. Iraf output files are given in the `Output` directory, whereas pypeit output files are found in the standard `Science` directory.
+
 # License (MIT)
 
 (see `LICENSE`)
