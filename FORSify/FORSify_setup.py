@@ -89,6 +89,7 @@ class FORS_setup:
                     "dispname"
                 ].values[0]
                 sensfiles.append(self.grab_sensfunc(grism))
+        print(sensfiles)
         header = fits.getheader(spec1dfiles[0])
         spectrograph = load_spectrograph(header["PYP_SPEC"])
 
