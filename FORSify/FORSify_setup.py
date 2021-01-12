@@ -18,7 +18,6 @@ from pypeit import pypeit
 from pypeit.spectrographs.util import load_spectrograph
 from pypeit.par import pypeitpar
 from pypeit import fluxcalibrate
-
 from FORSify.util import PypeIt_to_iraf
 from FORSify.util import symlink_force
 
@@ -40,7 +39,9 @@ class FORS_setup:
     def reduce(self):
         if self.archival == True:
             print("Using archival data")
-            self.create_archival_data_symlinks()
+            grism = self.get_correct_grism()
+            print(grism)
+            self.create_archival_data_symlinks(grism)
         if self.args.root is not None:
             ps = PypeItSetup.from_file_root(
                 self.args.root,
@@ -65,6 +66,13 @@ class FORS_setup:
         )
         pipeline.reduce_all()
         self.flux_spectra()
+
+    def get_correct_grism(self):
+        raw_dir = os.path.join(self.args.root, "*.fits")
+        file = glob.glob(raw_dir)[0]
+        header = fits.open(file)[0].header
+        grism = header["HIERARCH ESO INS GRIS1 NAME"]
+        return grism
 
     def flux_spectra(self):
         science_dir = os.path.join(os.path.split(self.working_dir)[0], "Science")
@@ -111,11 +119,9 @@ class FORS_setup:
         except:
             raise IOError("Grism not included!")
 
-    def create_archival_data_symlinks(self):
+    def create_archival_data_symlinks(self, grism):
         all_files = []
-        path = os.path.join(
-            self.FORSIfy_path, "data", "archival_calibs", "GRIS300V", "20190922"
-        )
+        path = os.path.join(self.FORSIfy_path, "data", "archival_calibs", grism, "*")
         for type in ["arc", "flats", "bias"]:
             filepath = os.path.join(path, type, "*.fits")
             files_of_type = glob.glob(filepath)
