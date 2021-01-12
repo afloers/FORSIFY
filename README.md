@@ -17,11 +17,15 @@
 * future
 * PyYAML
 * linetools
-* spectres
 * IPython
 * scikit-learn
 * configobj
 * pypeit
+
+Then, install spectres manually:
+```console
+foo@bar:~$ pip install spectres
+```
 
 # Usage
 See all FORSify options by running the following command in your terminal:
