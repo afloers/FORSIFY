@@ -4,7 +4,7 @@
 
 # Requirements
 
-(see `FORSIFY/requirements.txt`)
+(see `FORSify/requirements.txt`)
 
 * python
 * numpy
@@ -21,6 +21,18 @@
 * scikit-learn
 * configobj
 * pypeit
+
+# Installation instructions
+You can install the necessary packages and the pipeline by running
+the following commands in your terminal:
+```
+git clone https://github.com/afloers/FORSIFY.git
+cd FORSify
+conda env create -n forsify --file FORSify/requirements.txt
+conda activate forsify
+pip install spectres
+python setup.py install
+```
 
 Then, install spectres manually:
 ```console
