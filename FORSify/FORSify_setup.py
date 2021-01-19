@@ -33,6 +33,8 @@ class FORS_setup:
         self.sources = args.sources
         self.archival = args.archival
         self.sorted = None
+        self.masters = args.masters
+
         # self.FORSIfy_path = resource_filename("FORSify")
         self.FORSIfy_path = pathlib.Path(__file__).parent.absolute()
 
@@ -42,6 +44,8 @@ class FORS_setup:
             grism = self.get_correct_grism()
             print(grism)
             self.create_archival_data_symlinks(grism)
+            if self.masters == True:
+                self.copy_archival_masters(grism)
         if self.args.root is not None:
             ps = PypeItSetup.from_file_root(
                 self.args.root,
@@ -61,7 +65,7 @@ class FORS_setup:
         pipeline = pypeit.PypeIt(
             self.tmp.name,
             verbosity=self.args.verbosity,
-            reuse_masters=False,
+            reuse_masters=self.masters,
             overwrite=self.args.overwrite,
         )
         pipeline.reduce_all()
@@ -119,9 +123,20 @@ class FORS_setup:
         except:
             raise IOError("Grism not included!")
 
+    def copy_archival_masters(self, grism):
+        from shutil import copytree
+
+        path = os.path.join(
+            self.FORSIfy_path, "data", "archival_calibs", grism, "Masters"
+        )
+        print(path)
+        copytree(path, os.path.join(os.path.split(self.working_dir)[0], "Masters"))
+
     def create_archival_data_symlinks(self, grism):
         all_files = []
-        path = os.path.join(self.FORSIfy_path, "data", "archival_calibs", grism, "*")
+        path = os.path.join(
+            self.FORSIfy_path, "data", "archival_calibs", grism, "20*", "*"
+        )
         for type in ["arc", "flats", "bias"]:
             filepath = os.path.join(path, type, "*.fits")
             files_of_type = glob.glob(filepath)
