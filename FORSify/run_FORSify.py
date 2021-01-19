@@ -66,6 +66,13 @@ def parse_args():
         action="store_true",
         help="If True, use archival calibration data instead.",
     )
+    argparser.add_argument(
+        "-m",
+        "--masters",
+        default=True,
+        action="store_true",
+        help="Reuses archival masters instead of recalibrating them. Requires --archival.",
+    )
     return argparser.parse_args()
 
 
