@@ -194,9 +194,10 @@ class FORS_setup:
         self.pypeit_header += "[calibrations]\n"
         self.pypeit_header += "[[slitedges]]\n"
         self.pypeit_header += "sync_predict = nearest\n"
+        self.pypeit_header += "[reduce]\n"
+        self.pypeit_header += "[[findobj]]\n"
+        self.pypeit_header += "find_fwhm = 2\n"
         if self.args.sources > 0:
-            self.pypeit_header += "[reduce]\n"
-            self.pypeit_header += "[[findobj]]\n"
             self.pypeit_header += "maxnumber =" + str(self.sources) + "\n"
         self.pypeit_header += "setup read\n"
         self.pypeit_header += "Setup A:\n"
